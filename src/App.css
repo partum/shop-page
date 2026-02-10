@@ -40,3 +40,16 @@
 .read-the-docs {
   color: #888;
 }
+
+.productCard {
+  display: inline-block;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  text-align: left;
+  img{
+    width: 100%;
+  }
+}

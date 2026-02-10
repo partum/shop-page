@@ -1,34 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import React, { useState, useEffect } from 'react';
+import Card from './components/card'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState(null);
+
+  const fetchData = () => {
+    setLoading(true);
+    setError(null);
+    fetch(`https://fakestoreapi.com/products`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Product not found');
+        }
+        return response.json();
+      })
+      .then(json => {
+        setData(json);
+        setError(null);
+      })
+      .catch(error => {
+        console.error(error);
+        setError('Failed to fetch product data');
+        setData(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+console.log('data', data);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <h1>Welcome to Test Store!</h1>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {data && !loading && !error && (
+        data.map(product => (
+          <Card key={product.id} image={product.image} title={product.title} price={product.price} desc={product.description}/>
+        ))
+        // <Card image={data[0].image} title={data[0].title} price={data[0].price} desc={data[0].description}/>
+      )}
+    </div>
   )
 }
 
