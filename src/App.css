@@ -53,3 +53,19 @@
     width: 100%;
   }
 }
+
+.main{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sortButton{
+  padding: 0;
+  background-color: transparent;
+  img{
+    width: 32px;
+    height: 32px;
+  }
+}
