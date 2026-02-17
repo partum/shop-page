@@ -3,6 +3,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Card from './components/card'
 import sortAZ from './assets/alphabetical-sorting-icon-lg.png'
 import sortZA from './assets/alphabetical-sorting-icon-size_24.png'
+import plusIcon from './assets/free-plus-icon-321-thumb.png'
+import Modal from './components/modal';
 
 interface Product {
   id: number;
@@ -48,10 +50,15 @@ function App() {
     fetchData();
   }, []);
 
-  //console.log('data', data);
+//start of search
+  const filteredItems = useMemo(() => {
+    return data ? data.filter((item) =>
+      item.title.toLowerCase().includes(query.toLowerCase()) || item.category.toLowerCase().includes(query.toLowerCase()) || item.description.toLowerCase().includes(query.toLowerCase())
+    ) : [];
+  }, [query, data]);
 
   function sortAtoZ() {
-    const sortedData = data ? data.sort(
+    const sortedData = filteredItems ? filteredItems.sort(
       (a, b) => {
         const titleA = a.title.toUpperCase(); // ignore upper and lowercase
         const titleB = b.title.toUpperCase(); // ignore upper and lowercase
@@ -69,7 +76,7 @@ function App() {
   }
 
   function sortZtoA() {
-    const sortedData = data ? data.sort(
+    const sortedData = filteredItems ? filteredItems.sort(
       (a, b) => {
         const titleA = a.title.toUpperCase(); // ignore upper and lowercase
         const titleB = b.title.toUpperCase(); // ignore upper and lowercase
@@ -96,21 +103,9 @@ function App() {
     setAtoZ(!atoZ);
   };
 
-  // useEffect(() => {
-  //   if (atoZ) {
-  //     sortAtoZ();
-  //   } else {
-  //     sortZtoA();
-  //   }
-  // }
-  //   , [atoZ]);
-
-  //start of search
-  const filteredItems = useMemo(() => {
-    return data ? data.filter((item) =>
-      item.title.toLowerCase().includes(query.toLowerCase()) || item.category.toLowerCase().includes(query.toLowerCase()) || item.description.toLowerCase().includes(query.toLowerCase())
-    ) : [];
-  }, [query]);
+function openModal(){
+  
+}
 
   return (
     <div>
@@ -126,6 +121,7 @@ function App() {
       />
       {/* <button type="submit">Search</button> */}
       <button className='sortButton' onClick={toggleSort}><img src={atoZ ? sortAZ : sortZA} alt="sort alphabetically" /></button>
+      <button className='addItem' onClick={openModal}><img src={plusIcon} alt='add item'/></button>
       <div className='main'>
         {data && !loading && !error && (
           filteredItems.map(product => (
@@ -134,6 +130,7 @@ function App() {
 
         )}
       </div>
+      <Modal />
     </div>
   )
 }
