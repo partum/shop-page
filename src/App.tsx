@@ -21,6 +21,7 @@ function App() {
   const [data, setData] = useState<Product[] | null>(null);
   const [atoZ, setAtoZ] = useState(true);
   const [query, setQuery] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const fetchData = () => {
     setLoading(true);
@@ -104,7 +105,7 @@ function App() {
   };
 
 function openModal(){
-  
+  setModalOpen(true);
 }
 
   return (
@@ -112,6 +113,7 @@ function openModal(){
       <h1>Welcome to Test Store!</h1>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      <button className='addItem' onClick={openModal}><img src={plusIcon} alt='add item'/></button>
       <input
         id="search"
         type="search"
@@ -121,7 +123,6 @@ function openModal(){
       />
       {/* <button type="submit">Search</button> */}
       <button className='sortButton' onClick={toggleSort}><img src={atoZ ? sortAZ : sortZA} alt="sort alphabetically" /></button>
-      <button className='addItem' onClick={openModal}><img src={plusIcon} alt='add item'/></button>
       <div className='main'>
         {data && !loading && !error && (
           filteredItems.map(product => (
@@ -130,7 +131,7 @@ function openModal(){
 
         )}
       </div>
-      <Modal />
+      {modalOpen && <Modal closeModal={setModalOpen}/>}
     </div>
   )
 }
