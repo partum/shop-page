@@ -113,16 +113,30 @@ function App() {
   const handleProductData = (data: Product): void => {
     setNewProduct(data);
   };
-//re-render product list when new product is added
-  useEffect(() => {
-    if (newProduct && data) {
-      setData([...data, newProduct]);
-    }
-  }, [newProduct]);
-
+  //re-render product list when new product is added
   // useEffect(() => {
-  //   setAtoZ(atoZ)
-  // }, [newProduct]); 
+  //   if (newProduct && data) {
+  //     setData([...data, newProduct]);
+  //   }
+  // }, [newProduct]);
+
+  useEffect(() => {
+    if (!newProduct) return;
+    // POST request using fetch inside useEffect React hook
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProduct)
+    };
+
+    fetch('https://fakestoreapi.com/products', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setData(prevData => prevData ? [...prevData, newProduct] : [newProduct]);
+        setNewProduct(null);
+      })
+      .catch(error => setError(error.message));
+  }, [newProduct]);
 
   return (
     <div>
