@@ -22,6 +22,7 @@ function App() {
   const [atoZ, setAtoZ] = useState(true);
   const [query, setQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [newProduct, setNewProduct] = useState<Product | null>(null);
 
   const fetchData = () => {
     setLoading(true);
@@ -51,7 +52,7 @@ function App() {
     fetchData();
   }, []);
 
-//start of search
+  //start of search
   const filteredItems = useMemo(() => {
     return data ? data.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase()) || item.category.toLowerCase().includes(query.toLowerCase()) || item.description.toLowerCase().includes(query.toLowerCase())
@@ -104,16 +105,32 @@ function App() {
     setAtoZ(!atoZ);
   };
 
-function openModal(){
-  setModalOpen(true);
-}
+  function openModal() {
+    setModalOpen(true);
+  }
+
+  // Callback function to receive data from the child
+  const handleProductData = (data: Product): void => {
+    setNewProduct(data);
+  };
+
+  useEffect(() => {
+    if (newProduct) {
+      filteredItems.push(newProduct);
+      console.log(filteredItems);
+    }
+  }, [newProduct]);
+
+  // useEffect(() => {
+  //   setAtoZ(atoZ)
+  // }, [newProduct]); 
 
   return (
     <div>
       <h1>Welcome to Test Store!</h1>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button className='addItem' onClick={openModal}><img src={plusIcon} alt='add item'/></button>
+      <button className='addItem' onClick={openModal} style={{ float: "right" }}><img src={plusIcon} alt='add item' /></button>
       <input
         id="search"
         type="search"
@@ -131,7 +148,7 @@ function openModal(){
 
         )}
       </div>
-      {modalOpen && <Modal closeModal={setModalOpen}/>}
+      {modalOpen && <Modal closeModal={(value: boolean) => setModalOpen(value)} onDataReceived={(data: object) => handleProductData(data as Product)} />}
     </div>
   )
 }
