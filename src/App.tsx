@@ -113,11 +113,10 @@ function App() {
   const handleProductData = (data: Product): void => {
     setNewProduct(data);
   };
-
+//re-render product list when new product is added
   useEffect(() => {
-    if (newProduct) {
-      filteredItems.push(newProduct);
-      console.log(filteredItems);
+    if (newProduct && data) {
+      setData([...data, newProduct]);
     }
   }, [newProduct]);
 
