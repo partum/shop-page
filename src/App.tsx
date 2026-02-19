@@ -60,7 +60,7 @@ function App() {
   }, [query, data]);
 
   function sortAtoZ() {
-    const sortedData = filteredItems ? filteredItems.sort(
+    const sortedData: Product[] = filteredItems ? [...filteredItems].sort(
       (a, b) => {
         const titleA = a.title.toUpperCase(); // ignore upper and lowercase
         const titleB = b.title.toUpperCase(); // ignore upper and lowercase
@@ -75,10 +75,11 @@ function App() {
         return 0;
       }
     ) : [];
+    return sortedData;
   }
 
   function sortZtoA() {
-    const sortedData = filteredItems ? filteredItems.sort(
+    const sortedData: Product[] = filteredItems ? [...filteredItems].sort(
       (a, b) => {
         const titleA = a.title.toUpperCase(); // ignore upper and lowercase
         const titleB = b.title.toUpperCase(); // ignore upper and lowercase
@@ -93,6 +94,7 @@ function App() {
         return 0;
       }
     ) : [];
+    return sortedData;
   }
 
   if (atoZ) {
@@ -131,7 +133,7 @@ function App() {
 
     fetch('https://fakestoreapi.com/products', requestOptions)
       .then(response => response.json())
-      .then(result => {
+      .then(() => {
         setData(prevData => prevData ? [...prevData, newProduct] : [newProduct]);
         setNewProduct(null);
       })
