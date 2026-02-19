@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type ModalProps = {
     closeModal: (value: boolean) => void;
@@ -31,7 +31,7 @@ function Modal({ closeModal, onDataReceived }: ModalProps) {
         onDataReceived(data)
     }
 
-    return <span className='modal' onClick={(e) => { if (e.target.className === 'modal') { closeModal(false) } }}>
+    return <span className='modal' onClick={(e) => { if ((e.target as HTMLElement).className === 'modal') { closeModal(false) } }}>
         <span>
             <h2>Enter Product Info</h2>
             <form>
