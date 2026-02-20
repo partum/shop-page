@@ -1,5 +1,5 @@
 import './App.css'
-import { useState, useEffect, useMemo, use } from 'react';
+import { useState, useEffect, useMemo} from 'react';
 import Card from './components/card'
 import sortAZ from './assets/alphabetical-sorting-icon-lg.png'
 import sortZA from './assets/alphabetical-sorting-icon-size_24.png'
