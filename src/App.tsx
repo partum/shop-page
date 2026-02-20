@@ -1,5 +1,5 @@
 import './App.css'
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, use } from 'react';
 import Card from './components/card'
 import sortAZ from './assets/alphabetical-sorting-icon-lg.png'
 import sortZA from './assets/alphabetical-sorting-icon-size_24.png'
@@ -53,59 +53,72 @@ function App() {
   }, []);
 
   //start of search
-  const filteredItems = useMemo(() => {
-    return data ? data.filter((item) =>
+    const filteredItems = useMemo(() => {
+    const items = data ? data.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase()) || item.category.toLowerCase().includes(query.toLowerCase()) || item.description.toLowerCase().includes(query.toLowerCase())
     ) : [];
-  }, [query, data]);
 
-  function sortAtoZ() {
-    const sortedData: Product[] = filteredItems ? [...filteredItems].sort(
-      (a, b) => {
-        const titleA = a.title.toUpperCase(); // ignore upper and lowercase
-        const titleB = b.title.toUpperCase(); // ignore upper and lowercase
-        if (titleA < titleB) {
-          return -1;
-        }
-        if (titleA > titleB) {
-          return 1;
-        }
+    if (atoZ) {
+      items.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
+    } else {
+      items.sort((a, b) => b.title.toUpperCase().localeCompare(a.title.toUpperCase()));
+    }
 
-        // names must be equal
-        return 0;
-      }
-    ) : [];
-    return sortedData;
-  }
+    return items;
+  }, [query, data, atoZ]);
 
-  function sortZtoA() {
-    const sortedData: Product[] = filteredItems ? [...filteredItems].sort(
-      (a, b) => {
-        const titleA = a.title.toUpperCase(); // ignore upper and lowercase
-        const titleB = b.title.toUpperCase(); // ignore upper and lowercase
-        if (titleA > titleB) {
-          return -1;
-        }
-        if (titleA < titleB) {
-          return 1;
-        }
+  // function sortAtoZ() {
+  //   const sortedData: Product[] = filteredItems ? [...filteredItems].sort(
+  //     (a, b) => {
+  //       const titleA = a.title.toUpperCase(); // ignore upper and lowercase
+  //       const titleB = b.title.toUpperCase(); // ignore upper and lowercase
+  //       if (titleA < titleB) {
+  //         return -1;
+  //       }
+  //       if (titleA > titleB) {
+  //         return 1;
+  //       }
 
-        // names must be equal
-        return 0;
-      }
-    ) : [];
-    return sortedData;
-  }
+  //       // names must be equal
+  //       return 0;
+  //     }
+  //   ) : [];
+  //   return sortedData;
+  // }
 
-  if (atoZ) {
-    sortAtoZ();
-  } else {
-    sortZtoA();
-  }
+  // function sortZtoA() {
+  //   const sortedData: Product[] = filteredItems ? [...filteredItems].sort(
+  //     (a, b) => {
+  //       const titleA = a.title.toUpperCase(); // ignore upper and lowercase
+  //       const titleB = b.title.toUpperCase(); // ignore upper and lowercase
+  //       if (titleA > titleB) {
+  //         return -1;
+  //       }
+  //       if (titleA < titleB) {
+  //         return 1;
+  //       }
+
+  //       // names must be equal
+  //       return 0;
+  //     }
+  //   ) : [];
+  //   return sortedData;
+  // }
+
+
 
   function toggleSort() {
     setAtoZ(!atoZ);
+
   };
+
+// useEffect(() => {
+// if (atoZ) {
+//       setAtoZ(sortAtoZ());
+//     } else {
+//       setAtoZ(sortZtoA());
+//     }
+// }, [atoZ]);
 
   function openModal() {
     setModalOpen(true);
